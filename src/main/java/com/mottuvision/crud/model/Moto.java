@@ -37,7 +37,7 @@ public class Moto {
 	
 	@Column(name = "chassi", nullable = false, unique = true)
 	@NotBlank(message = "O chassi não pode ser vazia")
-	@Size(min = 7, max = 10, message = "O chassi deve ter entre 17 e 20 carcteres")
+	@Size(min = 7, max = 20, message = "O chassi deve ter entre 17 e 20 carcteres")
 	private String chassi;
 
 	@Column(name = "qr_code")
