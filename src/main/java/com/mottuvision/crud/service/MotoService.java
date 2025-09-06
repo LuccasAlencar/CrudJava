@@ -26,6 +26,8 @@ public class MotoService {
     }
 
     public Moto save(Moto moto) {
+        // O lado dono do relacionamento 1-1 é Moto (JoinColumn em Moto),
+        // portanto não é necessário setar back-reference no Identificador.
         return motoRepository.save(moto);
     }
 

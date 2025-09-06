@@ -33,3 +33,9 @@ INSERT INTO status (id, nome, status_grupo_id) VALUES (status_seq.NEXTVAL, 'Furt
 INSERT INTO status (id, nome, status_grupo_id) VALUES (status_seq.NEXTVAL, 'Irreparável', (SELECT id FROM status_grupo WHERE nome = 'Indisponível'));
 INSERT INTO status (id, nome, status_grupo_id) VALUES (status_seq.NEXTVAL, 'Pronta', (SELECT id FROM status_grupo WHERE nome = 'Pronta'));
 INSERT INTO status (id, nome, status_grupo_id) VALUES (status_seq.NEXTVAL, 'Reservada', (SELECT id FROM status_grupo WHERE nome = 'Pronta'));
+
+-- Inserir modelos
+INSERT INTO modelo (id, nome, imagem_url) VALUES (modelo_seq.NEXTVAL, 'SPORT-ESD', 'https://res.cloudinary.com/dh2xwffjw/image/upload/v1756745821/SPORT-ESD_u1hald.png');
+INSERT INTO modelo (id, nome, imagem_url) VALUES (modelo_seq.NEXTVAL, 'SPORT', 'https://res.cloudinary.com/dh2xwffjw/image/upload/v1756745821/SPORT_ku7n7q.png');
+INSERT INTO modelo (id, nome, imagem_url) VALUES (modelo_seq.NEXTVAL, 'MOTTU-E', 'https://res.cloudinary.com/dh2xwffjw/image/upload/v1756745820/MOTTU-E_v6zfg4.png');
+INSERT INTO modelo (id, nome, imagem_url) VALUES (modelo_seq.NEXTVAL, 'POP', 'https://res.cloudinary.com/dh2xwffjw/image/upload/v1756745821/POP_yatqwi.png');
