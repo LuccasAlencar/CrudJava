@@ -11,9 +11,13 @@ import org.springframework.stereotype.Service;
 
 import com.mottuvision.crud.dto.RelatorioDTO;
 import com.mottuvision.crud.dto.RelatorioDTO.RelatorioZonaDTO;
+import com.mottuvision.crud.dto.RelatorioDTO.RelatorioPatioDTO;
 import com.mottuvision.crud.model.Moto;
+import com.mottuvision.crud.model.Patio;
 import com.mottuvision.crud.model.Zona;
 import com.mottuvision.crud.repository.MotoRepository;
+import com.mottuvision.crud.repository.PatioFinalizadasRepository;
+import com.mottuvision.crud.repository.PatioRepository;
 import com.mottuvision.crud.repository.ZonaRepository;
 
 @Service
@@ -24,9 +28,15 @@ public class RelatorioService {
     
     @Autowired
     private ZonaRepository zonaRepository;
+    
+    @Autowired
+    private PatioRepository patioRepository;
+    
+    @Autowired
+    private PatioFinalizadasRepository patioFinalizadasRepository;
 
     public RelatorioDTO gerarRelatorio() {
-        // Buscar todas as motos
+        // Buscar todas as motos ativas
         List<Moto> todasMotos = motoRepository.findAll();
         
         // Calcular totais gerais
@@ -35,12 +45,17 @@ public class RelatorioService {
         Long totalAguardando = contarPorGrupoStatus(todasMotos, "Aguardando");
         Long totalIndisponivel = contarPorGrupoStatus(todasMotos, "Indisponível");
         Long totalPronta = contarPorGrupoStatus(todasMotos, "Pronta");
+        Long totalFinalizadas = patioFinalizadasRepository.countTotal();
         
         // Gerar dados por zona
         List<RelatorioZonaDTO> dadosZonas = gerarDadosPorZona(todasMotos);
         
+        // Gerar dados por pátio
+        List<RelatorioPatioDTO> dadosPatios = gerarDadosPorPatio(todasMotos);
+        
         return new RelatorioDTO(totalMotos, totalManutencao, totalAguardando, 
-                               totalIndisponivel, totalPronta, dadosZonas);
+                               totalIndisponivel, totalPronta, totalFinalizadas,
+                               dadosZonas, dadosPatios);
     }
     
     private Long contarPorGrupoStatus(List<Moto> motos, String grupoStatus) {
@@ -112,6 +127,38 @@ public class RelatorioService {
         dadosZonas.sort((a, b) -> a.getZonaNome().compareTo(b.getZonaNome()));
         
         return dadosZonas;
+    }
+    
+    private List<RelatorioPatioDTO> gerarDadosPorPatio(List<Moto> todasMotos) {
+        List<RelatorioPatioDTO> dadosPatios = new ArrayList<>();
+        
+        // Agrupar motos ativas por pátio
+        Map<Patio, List<Moto>> motosPorPatio = todasMotos.stream()
+                .filter(moto -> moto.getPatio() != null)
+                .collect(Collectors.groupingBy(Moto::getPatio));
+        
+        // Buscar todos os pátios
+        List<Patio> todosPatios = patioRepository.findAll();
+        
+        for (Patio patio : todosPatios) {
+            List<Moto> motosAtivas = motosPorPatio.getOrDefault(patio, new ArrayList<>());
+            Long quantidadeAtivas = (long) motosAtivas.size();
+            Long quantidadeFinalizadas = patioFinalizadasRepository.countByPatioId(patio.getId());
+            
+            RelatorioPatioDTO dadosPatio = new RelatorioPatioDTO(
+                patio.getId(),
+                patio.getNome(),
+                quantidadeAtivas,
+                quantidadeFinalizadas
+            );
+            
+            dadosPatios.add(dadosPatio);
+        }
+        
+        // Ordenar por nome do pátio
+        dadosPatios.sort((a, b) -> a.getPatioNome().compareTo(b.getPatioNome()));
+        
+        return dadosPatios;
     }
     
     private Map<String, Long> contarPorStatusEspecifico(List<Moto> motos, String grupoStatus) {

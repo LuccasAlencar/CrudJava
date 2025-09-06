@@ -10,21 +10,26 @@ public class RelatorioDTO {
     private Long totalAguardando;
     private Long totalIndisponivel;
     private Long totalPronta;
+    private Long totalFinalizadas; // NOVO CAMPO
     
     private List<RelatorioZonaDTO> zonas;
+    private List<RelatorioPatioDTO> patios; // NOVO CAMPO
     
     // Construtor padrão
     public RelatorioDTO() {}
     
-    // Construtor com parâmetros
+    // Construtor com parâmetros atualizado
     public RelatorioDTO(Long totalMotos, Long totalManutencao, Long totalAguardando, 
-                       Long totalIndisponivel, Long totalPronta, List<RelatorioZonaDTO> zonas) {
+                       Long totalIndisponivel, Long totalPronta, Long totalFinalizadas,
+                       List<RelatorioZonaDTO> zonas, List<RelatorioPatioDTO> patios) {
         this.totalMotos = totalMotos;
         this.totalManutencao = totalManutencao;
         this.totalAguardando = totalAguardando;
         this.totalIndisponivel = totalIndisponivel;
         this.totalPronta = totalPronta;
+        this.totalFinalizadas = totalFinalizadas;
         this.zonas = zonas;
+        this.patios = patios;
     }
 
     // Getters e Setters
@@ -68,6 +73,14 @@ public class RelatorioDTO {
         this.totalPronta = totalPronta;
     }
 
+    public Long getTotalFinalizadas() {
+        return totalFinalizadas;
+    }
+
+    public void setTotalFinalizadas(Long totalFinalizadas) {
+        this.totalFinalizadas = totalFinalizadas;
+    }
+
     public List<RelatorioZonaDTO> getZonas() {
         return zonas;
     }
@@ -75,8 +88,16 @@ public class RelatorioDTO {
     public void setZonas(List<RelatorioZonaDTO> zonas) {
         this.zonas = zonas;
     }
+
+    public List<RelatorioPatioDTO> getPatios() {
+        return patios;
+    }
+
+    public void setPatios(List<RelatorioPatioDTO> patios) {
+        this.patios = patios;
+    }
     
-    // Classe interna para dados por zona
+    // Classe interna para dados por zona (mantida igual)
     public static class RelatorioZonaDTO {
         private Long zonaId;
         private String zonaNome;
@@ -204,6 +225,58 @@ public class RelatorioDTO {
 
         public void setDetalhesPronta(Map<String, Long> detalhesPronta) {
             this.detalhesPronta = detalhesPronta;
+        }
+    }
+    
+    // NOVA CLASSE INTERNA para dados por pátio
+    public static class RelatorioPatioDTO {
+        private Long patioId;
+        private String patioNome;
+        private Long motosAtivas;
+        private Long motosFinalizadas;
+        
+        // Construtor padrão
+        public RelatorioPatioDTO() {}
+        
+        // Construtor com parâmetros
+        public RelatorioPatioDTO(Long patioId, String patioNome, Long motosAtivas, Long motosFinalizadas) {
+            this.patioId = patioId;
+            this.patioNome = patioNome;
+            this.motosAtivas = motosAtivas;
+            this.motosFinalizadas = motosFinalizadas;
+        }
+
+        // Getters e Setters
+        public Long getPatioId() {
+            return patioId;
+        }
+
+        public void setPatioId(Long patioId) {
+            this.patioId = patioId;
+        }
+
+        public String getPatioNome() {
+            return patioNome;
+        }
+
+        public void setPatioNome(String patioNome) {
+            this.patioNome = patioNome;
+        }
+
+        public Long getMotosAtivas() {
+            return motosAtivas;
+        }
+
+        public void setMotosAtivas(Long motosAtivas) {
+            this.motosAtivas = motosAtivas;
+        }
+
+        public Long getMotosFinalizadas() {
+            return motosFinalizadas;
+        }
+
+        public void setMotosFinalizadas(Long motosFinalizadas) {
+            this.motosFinalizadas = motosFinalizadas;
         }
     }
 }

@@ -72,15 +72,30 @@ public class MotoController {
         }
     }
     
-    // DELETE - Endpoint para deletar uma moto por id
+    // DELETE - Endpoint para deletar uma moto por id (EXCLUSÃO SIMPLES)
     @DeleteMapping("/{id}")
-    @Operation(summary = "Deleta uma moto", description = "Remove uma moto do banco de dados com base no ID fornecido.")
+    @Operation(summary = "Exclui uma moto", description = "Remove permanentemente uma moto do banco de dados sem contabilizar.")
     public ResponseEntity<Void> deleteMoto(@PathVariable Long id) {
         if (!motoService.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Moto não encontrada com o ID: " + id);
         }
         motoService.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+    
+    // POST - Endpoint para finalizar uma moto (EXCLUSÃO COM CONTABILIZAÇÃO)
+    @PostMapping("/{id}/finalizar")
+    @Operation(summary = "Finaliza uma moto", 
+               description = "Remove a moto do banco de dados e contabiliza como finalizada no pátio para fins de relatório.")
+    public ResponseEntity<Void> finalizarMoto(@PathVariable Long id) {
+        try {
+            motoService.finalizarMoto(id);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao finalizar moto: " + e.getMessage());
+        }
     }
     
     // PUT - Endpoint para alterar uma moto por id
