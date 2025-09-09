@@ -1,0 +1,47 @@
+# Ignorar arquivos desnecessários no build Docker
+
+# Target directory (será gerado durante o build)
+target/
+
+# IDE files
+.vscode/
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+README.md
+*.md
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+.tmp/
+
+# Maven
+!.mvn/wrapper/maven-wrapper.jar
+!.mvn/wrapper/maven-wrapper.properties
+
+# Spring Boot
+*.jar
+*.war
+*.ear
+*.zip
+
+# Environment files
+.env
+.env.local
+.env.production
